@@ -1,8 +1,54 @@
 /*este array será en el futuro una lista heroes*/
 //variables y constantes
-const dataNotProvidedMessage = "Dato no suministrado por la API"
+const dataNotProvidedMessage = "Dato no suministrado por la API";
 let currentData = "";
-
+const handleModal = (e) => {
+    console.log(currentData);
+    let elementUlModal = document.querySelector("div.modal-body ul");
+    let heroe = currentData.find(heroe => heroe._id == e.target.id)
+    elementUlModal.innerHTML = `<li>Intelligence: ${heroe["powerstats/intelligence"]}</li>
+                                <li>Strength: ${heroe["powerstats/strength"]}</li>
+                                <li>Speed: ${heroe["powerstats/speed"]}</li>
+                                <li>Durability: ${heroe["powerstats/durability"]}</li>
+                                <li>Power: ${heroe["powerstats/power"]}</li>
+                                <li>Combat: ${heroe["powerstats/combat"]}</li>
+                                <li>Full Name: ${heroe["biography/fullName"]}</li>
+                                <li>Alter Egos: ${heroe["biography/alterEgos"]}</li>
+                                ${heroe["biography/aliases/0"] && '<li>Aliases: ' + heroe["biography/aliases/0"] + '</li>'} 
+                                ${heroe["biography/aliases/1"] && '<li>Aliases: ' + heroe["biography/aliases/1"] + '</li>'} 
+                                ${heroe["biography/aliases/2"] && '<li>Aliases: ' + heroe["biography/aliases/2"] + '</li>'} 
+                                ${heroe["biography/aliases/3"] && '<li>Aliases: ' + heroe["biography/aliases/3"] + '</li>'} 
+                                ${heroe["biography/aliases/4"] && '<li>Aliases: ' + heroe["biography/aliases/4"] + '</li>'} 
+                                ${heroe["biography/aliases/5"] && '<li>Aliases: ' + heroe["biography/aliases/5"] + '</li>'} 
+                                ${heroe["biography/aliases/6"] && '<li>Aliases: ' + heroe["biography/aliases/6"] + '</li>'} 
+                                ${heroe["biography/aliases/7"] && '<li>Aliases: ' + heroe["biography/aliases/7"] + '</li>'} 
+                                ${heroe["biography/aliases/8"] && '<li>Aliases: ' + heroe["biography/aliases/8"] + '</li>'} 
+                                ${heroe["biography/aliases/9"] && '<li>Aliases: ' + heroe["biography/aliases/9"] + '</li>'} 
+                                ${heroe["biography/aliases/10"] && '<li>Aliases: ' + heroe["biography/aliases/10"] + '</li>'} 
+                                ${heroe["biography/aliases/11"] && '<li>Aliases: ' + heroe["biography/aliases/11"] + '</li>'} 
+                                ${heroe["biography/aliases/12"] && '<li>Aliases: ' + heroe["biography/aliases/12"] + '</li>'} 
+                                ${heroe["biography/aliases/13"] && '<li>Aliases: ' + heroe["biography/aliases/13"] + '</li>'} 
+                                ${heroe["biography/aliases/14"] && '<li>Aliases: ' + heroe["biography/aliases/14"] + '</li>'} 
+                                ${heroe["biography/aliases/15"] && '<li>Aliases: ' + heroe["biography/aliases/15"] + '</li>'} 
+                                ${heroe["biography/aliases/16"] && '<li>Aliases: ' + heroe["biography/aliases/16"] + '</li>'} 
+                                ${heroe["biography/aliases/17"] && '<li>Aliases: ' + heroe["biography/aliases/17"] + '</li>'} 
+                                ${heroe["biography/aliases/18"] && '<li>Aliases: ' + heroe["biography/aliases/18"] + '</li>'} 
+                                ${heroe["biography/aliases/19"] && '<li>Aliases: ' + heroe["biography/aliases/19"] + '</li>'} 
+                                <li>Place of Birth: ${heroe["biography/placeOfBirth"]}</li>
+                                <li>First Appearance: ${heroe["biography/firstAppearance"]}</li>
+                                <li>Publisher: ${heroe["biography/publisher"]}</li>
+                                <li>Alignment: ${heroe["biography/alignment"]}</li>
+                                <li>Gender: ${heroe["appearance/gender"]}</li>
+                                <li>Race: ${heroe["appearance/race"]}</li>
+                                <li>Height: ${heroe["appearance/height/1"]}</li>
+                                <li>Weight: ${heroe["appearance/weight/1"]}</li>
+                                <li>Eye Color: ${heroe["appearance/eyeColor"]}</li>
+                                <li>Hair Color: ${heroe["appearance/hairColor"]}</li>
+                                <li>Occupation: ${heroe["biography/fullName"]}</li>
+                                <li>Base of operation: ${heroe["work/base"]}</li>`
+    $('#exampleModal').modal('show');
+}
+ 
 //funciones
 const renderHeroes = (heroes) => {
     let elementRow = document.querySelector(".row");
@@ -22,7 +68,7 @@ const renderHeroes = (heroes) => {
                                             </ul>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                                    <button type="button" id=${heroe._id} class="btn btn-sm btn-outline-secondary" onclick="handleModal(event)">View</button>
                                                     <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                                                 </div>
                                                 <small class="text-muted">9 mins</small>
@@ -58,7 +104,7 @@ elementsPrevious.forEach((element) => element.addEventListener("click", (e) => {
     if (skip > 0) {
         skip -= 9;
         apiGetPagination(skip, 9);
-        if (skip <= 0) document.querySelector(".btn-previous").parentNode.classList.add("disabled");
+        if (skip <= 0) document.querySelectorAll(".btn-previous").forEach((btn) => btn.parentNode.classList.add("disabled"));
     }
 
 }))
@@ -69,7 +115,7 @@ elementsNext.forEach((element) => element.addEventListener("click", (e) => {
     skip += 9;
     apiGetPagination(skip, 9);
     if (skip > 0) {
-        document.querySelector(".btn-previous").parentNode.classList.remove("disabled");
+        document.querySelectorAll(".btn-previous").forEach((btn) => btn.parentNode.classList.remove("disabled"));
     }
 }))
 
@@ -82,7 +128,7 @@ elementSearch.addEventListener("keyup", (e) => {
         let maxPower = heroe["powerstats/power"].toLowerCase();
         let place = heroe["biography/placeOfBirth"].toLowerCase();
         return fullName.includes(e.target.value.toLowerCase()) ||
-            gender.includes(e.target.value.toLowerCase()) ||
+            gender.startsWith(e.target.value.toLowerCase()) ||
             maxPower.includes(e.target.value.toLowerCase()) ||
             place.includes(e.target.value.toLowerCase())
     });
