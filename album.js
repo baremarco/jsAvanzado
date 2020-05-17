@@ -2,10 +2,14 @@
 //variables y constantes
 const dataNotProvidedMessage = "Dato no suministrado por la API";
 let currentData = "";
+let skip = 0;
+const urlApi = "https://shrouded-tor-09389.herokuapp.com";
+//funciones
 const handleModal = (e) => {
-    console.log(currentData);
     let elementUlModal = document.querySelector("div.modal-body ul");
+    let elementModalTitle = document.querySelector("#exampleModalLabel")
     let heroe = currentData.find(heroe => heroe._id == e.target.id)
+    elementModalTitle.innerHTML = heroe.slug;
     elementUlModal.innerHTML = `<li>Intelligence: ${heroe["powerstats/intelligence"]}</li>
                                 <li>Strength: ${heroe["powerstats/strength"]}</li>
                                 <li>Speed: ${heroe["powerstats/speed"]}</li>
@@ -48,8 +52,23 @@ const handleModal = (e) => {
                                 <li>Base of operation: ${heroe["work/base"]}</li>`
     $('#exampleModal').modal('show');
 }
- 
-//funciones
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 const renderHeroes = (heroes) => {
     let elementRow = document.querySelector(".row");
     elementRow.innerHTML = "";
@@ -80,22 +99,22 @@ const renderHeroes = (heroes) => {
 }
 
 const apiGetPagination = (skip, limit) => {
-    const urlApi = `https://shrouded-tor-09389.herokuapp.com/all/pagination/${skip}/${limit}`
-    fetch(urlApi)
+    let urlPagination = `${urlApi}/all/pagination/${skip}/${limit}`
+    fetch(urlPagination, {
+        headers: {
+            "Content-Type": "application/json",
+            "token": getCookie("tokenApiHeroes")
+        }
+    })
         .then(response => {
             return response.json();
         })
         .then(data => {
             currentData = data;
             renderHeroes(currentData);
-
         })
-
 }
 
-
-let skip = 0;
-apiGetPagination(skip, 9);
 
 //programacion boton previous
 let elementsPrevious = document.querySelectorAll(".btn-previous");
@@ -134,3 +153,54 @@ elementSearch.addEventListener("keyup", (e) => {
     });
     renderHeroes(filteredData);
 })
+
+//programacion del  enviar super heroe del abmModal
+let elementFormAbmModal = document.querySelector("form.abmModal");
+elementFormAbmModal.addEventListener("submit", (e) => {
+    const urlCreate = `${urlApi}/create`
+    let elementName = document.querySelector("#name");
+    let elementSlug = document.querySelector("#slug");
+    let elementGender = document.querySelector("#gender");
+    let elementMaxPower = document.querySelector("#maxpower");
+    const name = elementName.value;
+    const slug = elementSlug.value;
+    const gender = elementGender.value;
+    const maxPower = elementMaxPower.value;
+    e.preventDefault();
+    if (getCookie("tokenApiHeroes")) {
+        fetch(urlCreate, {
+            method: "POST",
+            body: JSON.stringify({
+                name,
+                slug,
+                appearancegender: gender,
+                powerstatspower: maxPower 
+            }),
+            headers: {
+                "Content-Type": "application/json",
+                "token": getCookie("tokenApiHeroes")
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                console.log(json);
+            })
+        elementName.value = "";
+        elementSlug.value = "";
+        elementGender.value = "";
+        elementMaxPower.value = "";
+        $('#abmModal').modal('hide');
+
+    } else {
+        document.location.replace("/index.html");
+
+    }
+})
+
+setInterval( () => {
+    if (getCookie("tokenApiHeroes")) document.location.replace("/index.html");
+}, 60000 * 5);
+// ----------------------------------Pragrama--------------------------------
+
+//Llamado a la api y renderizado
+apiGetPagination(skip, 9);

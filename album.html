@@ -11,7 +11,8 @@
 
     <!-- Bootstrap core CSS -->
     <link href="./bootstrap.css" rel="stylesheet">
-
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <style>
         .bd-placeholder-img {
@@ -34,6 +35,7 @@
 </head>
 
 <body>
+    <!-- <h2>icono aqui <span class="material-icons"> star_border</span><span class="material-icons"> star</span></h2> -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -111,7 +113,6 @@
                     </div>
                     <div class="modal-body">
                         <ul>
-                            <li>Inteligencia</li>
                         </ul>
                     </div>
                     <div class="modal-footer">
@@ -121,6 +122,55 @@
                 </div>
             </div>
         </div>
+
+        <!-- modal abm -->
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#abmModal"
+            data-whatever="@getbootstrap">
+            Alta de Super Heroe
+        </button>
+
+        <div class="modal fade" id="abmModal" tabindex="-1" role="dialog" aria-labelledby="abmModal"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Datos del nuevo super heroe</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form class="abmModal">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="name" class="col-form-label">Nombre</label>
+                                <input type="text" class="form-control" id="name" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="slug" class="col-form-label">Slug</label>
+                                <input type="text" class="form-control" id="slug" name="slug">
+
+                            </div>
+                            <div class="form-group">
+                                <label for="gender" class="col-form-label">Genero</label>
+                                <input type="text" class="form-control" id="gender" name="gender">
+
+                            </div>
+                            <div class="form-group">
+                                <label for="maxporwer" class="col-form-label">Maximo Poder</label>
+                                <input type="text" class="form-control" id="maxpower" name="maxporwer">
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Enviar Super Heroe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
 
         <div class="album py-5 bg-light">
             <div class="container">
